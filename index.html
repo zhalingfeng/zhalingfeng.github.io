@@ -145,6 +145,73 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/22/how%20to%20make%20pachong/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/22/how%20to%20make%20pachong/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-22 22:42:19" itemprop="dateCreated datePublished" datetime="2022-07-22T22:42:19+08:00">2022-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-25 19:55:18" itemprop="dateModified" datetime="2022-07-25T19:55:18+08:00">2022-07-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-目标：提取事项名称和部门名称"><a href="#1-目标：提取事项名称和部门名称" class="headerlink" title="1 目标：提取事项名称和部门名称"></a>1 目标：提取事项名称和部门名称</h2><h2 id="2-找接口"><a href="#2-找接口" class="headerlink" title="2 找接口"></a>2 找接口</h2><h2 id="3-分析数据"><a href="#3-分析数据" class="headerlink" title="3 分析数据"></a>3 分析数据</h2><h2 id="4写代码"><a href="#4写代码" class="headerlink" title="4写代码"></a>4写代码</h2><h3 id="1写请求"><a href="#1写请求" class="headerlink" title="1写请求"></a>1写请求</h3><h3 id="2抽数据"><a href="#2抽数据" class="headerlink" title="2抽数据"></a>2抽数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> urllib.request</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 请求</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">post_task_id</span>():</span><br><span class="line">    headers = &#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) &#x27;</span></span><br><span class="line">                             <span class="string">&#x27;Chrome/51.0.2704.63 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">    url = <span class="string">&#x27;http://www.gdzwfw.gov.cn/portal/api/v2/item-event/getAuditItemDetailCur&#x27;</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&#x27;TASK_CODE&#x27;</span>: <span class="string">&#x27;12440100741854396C3442014055017&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    res = requests.post(url, params=params, headers=headers)</span><br><span class="line">    <span class="keyword">return</span> res.json()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取事项名称</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_task_info</span>(<span class="params">res</span>):</span><br><span class="line">    info = res[<span class="string">&#x27;AUDIT_ITEM&#x27;</span>]</span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&#x27;matter_name&#x27;</span>: info[<span class="string">&#x27;CATANAME&#x27;</span>],</span><br><span class="line">        <span class="string">&#x27;dept_name&#x27;</span>: info[<span class="string">&#x27;DEPT_NAME&#x27;</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(get_task_info(post_task_id()))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/15/how-to-make-hexo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -409,7 +476,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
